@@ -1,0 +1,65 @@
+@CHARSET "UTF-8";
+
+@media (min-width:992px) {
+	
+	#voiceBt {
+		display: none;
+	}
+	
+}
+
+#voiceBt {
+	background: url(../images/annyang/voice_loading.png) no-repeat center;
+	background-size: contain;
+	border: none;
+	float: left;
+	width: 40px;
+	height: 40px;
+	margin-top: 5px;
+	cursor: pointer;
+	z-index: 10000;
+}
+
+#restartVoice {
+	background: url(../images/annyang/voice_loading_min.png) no-repeat;
+	border: none;
+	width: 94px;
+	height: 94px;
+	cursor: pointer;
+	background-position: center;
+	background-size: contain;
+}
+
+#myModal {
+	z-index: 10000;
+}
+
+#myModal-body {
+	display: table;
+}
+
+#myModal-body .myCommandList {
+	display: table-row;
+}
+
+#myModal-body .uiSection {
+	display: table-row;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#myModal-body .uiSection #loadingDiv {
+	padding-top: 50px;
+}
+
+#myModal-body .uiSection #failMsgDiv {
+	padding-top: 50px;
+	display: none;
+}
+
+#failMsgDiv > p {
+	color: gray;
+	font: bold;
+	font-size: medium;
+}
+

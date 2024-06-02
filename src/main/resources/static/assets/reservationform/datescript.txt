@@ -1,0 +1,542 @@
+/**
+ * 
+ */
+
+	/*
+	 * '월' 영어 ==> 숫자로 변경
+	 */
+	function getFirstMonthNumber() {
+			var monthDiv = $('.paging > div');
+			var firstMonth = $(monthDiv[0]).text().split(',')[0].trim();
+			
+				switch (firstMonth) {
+					case "January":
+						firstMonth = "01";
+						break;
+					case "February":
+						firstMonth = "02";
+						break;
+					case "March":
+						firstMonth = "03";
+						break;
+					case "April":
+						firstMonth = "04";
+						break;
+					case "May":
+						firstMonth = "05";
+						break;
+					case "June":
+						firstMonth = "06";
+						break;
+					case "July":
+						firstMonth = "07";
+						break;
+					case "August":
+						firstMonth = "08";
+						break;
+					case "September":
+						firstMonth = "09";
+						break;
+					case "October":
+						firstMonth = "10";
+						break;
+					case "November":
+						firstMonth = "11";
+						break;
+					case "December":
+						firstMonth = "12";
+						break;
+				}
+			return firstMonth;
+		}
+		
+	function getLastMonthNumber() {
+			var monthDiv = $('.paging > div');
+			var secondMonth = $(monthDiv[1]).text().split(',')[0].trim();
+			
+				switch (secondMonth) {
+					case "January":
+						secondMonth = "01";
+						break;
+					case "February":
+						secondMonth = "02";
+						break;
+					case "March":
+						secondMonth = "03";
+						break;
+					case "April":
+						secondMonth = "04";
+						break;
+					case "May":
+						secondMonth = "05";
+						break;
+					case "June":
+						secondMonth = "06";
+						break;
+					case "July":
+						secondMonth = "07";
+						break;
+					case "August":
+						secondMonth = "08";
+						break;
+					case "September":
+						secondMonth = "09";
+						break;
+					case "October":
+						secondMonth = "10";
+						break;
+					case "November":
+						secondMonth = "11";
+						break;
+					case "December":
+						secondMonth = "12";
+						break;
+				}
+			return secondMonth;
+		}
+		
+		
+	    function hideLastDay(){
+	    	//1. 현재 선택 되어 있는 방
+			var currentRoomType = $('#room-type option:selected').val().trim();
+	    	
+			var reserveDataList = $('.p_reservation');
+			
+			
+			var calendarList = $('table tbody td');
+			//alert("calendarList.length: "+calendarList.length);
+			
+				
+			for (var i = 0; i < reserveDataList.length; i++) {
+				var roomName = $('#room'+i).text();
+				var inMonth = $('#inMonth'+i).text();
+				var inDay = $('#inDay'+i).text();
+				var outMonth = $('#outMonth'+i).text();
+				var outDay = $('#outDay'+i).text();
+				//예약기간
+				var duration = outDay - inDay;
+				
+				switch(currentRoomType) {
+				    case "Mercury":
+				        if(roomName=="Mercury"){
+				        	
+			        		//첫번째 달력
+				        	for (var j = 1; j <= 35; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        			//1. 하루 예약 일 때
+									if(duration == 0 && getFirstMonthNumber()==inMonth && $(calendarList[j]).text()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//2. 이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+										//2-1. 다른 달 예약일때
+											if(getFirstMonthNumber() === inMonth ){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													//if(calendarList[j].textContent == '31' || calendarList[j].textContent == '30') break;
+												}
+											}
+											if(getFirstMonthNumber() == outMonth ){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getFirstMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											//2-2. 같은 달 예약 일 때 
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+			        		
+			        		//두번째 달력
+			        		for (var j = 36; j <= 70; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        		//하루 예약 일 때
+									if(duration == 0 && getLastMonthNumber()==inMonth && $(calendarList[j]).text().trim()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+											if(getLastMonthNumber() === inMonth){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													
+												}
+											}
+											if(getLastMonthNumber() == outMonth){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getLastMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+				        }
+				        break;
+				    case "Venus":
+				        if(roomName=="Venus"){
+				        	//첫번째 달력
+				        	for (var j = 1; j <= 35; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        			//1. 하루 예약 일 때
+									if(duration == 0 && getFirstMonthNumber()==inMonth && $(calendarList[j]).text()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//2. 이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+										//2-1. 다른 달 예약일때
+											if(getFirstMonthNumber() === inMonth ){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													//if(calendarList[j].textContent == '31' || calendarList[j].textContent == '30') break;
+												}
+											}
+											if(getFirstMonthNumber() == outMonth ){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getFirstMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											//2-2. 같은 달 예약 일 때 
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+			        		
+			        		//두번째 달력
+			        		for (var j = 36; j <= 70; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        		//하루 예약 일 때
+									if(duration == 0 && getLastMonthNumber()==inMonth && $(calendarList[j]).text().trim()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+											if(getLastMonthNumber() === inMonth){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													
+												}
+											}
+											if(getLastMonthNumber() == outMonth){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getLastMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+				        }
+				        break;
+				    case "Mars":
+				        if(roomName=="Mars"){
+				        	//첫번째 달력
+				        	for (var j = 1; j <= 35; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        			//1. 하루 예약 일 때
+									if(duration == 0 && getFirstMonthNumber()==inMonth && $(calendarList[j]).text()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//2. 이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+										//2-1. 다른 달 예약일때
+											if(getFirstMonthNumber() === inMonth ){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													//if(calendarList[j].textContent == '31' || calendarList[j].textContent == '30') break;
+												}
+											}
+											if(getFirstMonthNumber() == outMonth ){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getFirstMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											//2-2. 같은 달 예약 일 때 
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+			        		
+			        		//두번째 달력
+			        		for (var j = 36; j <= 70; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        		//하루 예약 일 때
+									if(duration == 0 && getLastMonthNumber()==inMonth && $(calendarList[j]).text().trim()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+											if(getLastMonthNumber() === inMonth){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													
+												}
+											}
+											if(getLastMonthNumber() == outMonth){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getLastMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+				        }
+				        break;
+				    case "Jupiter":
+				        if(roomName=="Jupiter"){
+				        	//alert("inMonth: "+inMonth+"~outMonth: "+outMonth)
+				        	//첫번째 달력
+				        	for (var j = 1; j <= 35; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        			//1. 하루 예약 일 때
+									if(duration == 0 && getFirstMonthNumber()==inMonth && $(calendarList[j]).text()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//2. 이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+											alert("Jupiter방 다른 달");
+										//2-1. 다른 달 예약일때
+											if(getFirstMonthNumber() === inMonth ){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													//if(calendarList[j].textContent == '31' || calendarList[j].textContent == '30') break;
+												}
+											}
+											if(getFirstMonthNumber() == outMonth ){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getFirstMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											//2-2. 같은 달 예약 일 때
+											
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+			        		
+			        		//두번째 달력
+			        		for (var j = 36; j <= 70; j++) {
+				        		//alert(j+"번째<td>: "+$(calendarList[j]).text());
+				        		//하루 예약 일 때
+									if(duration == 0 && getLastMonthNumber()==inMonth && $(calendarList[j]).text().trim()==inDay && $(calendarList[j]).hasClass('cur-month')){
+										
+										$(calendarList[j]).addClass('unvailable');
+										
+										//$(calendarList[j]).attr('onclick','');
+										//$(calendarList[j]).off();
+									}
+									//이틀이상 예약 일 때
+									if(duration > 0 || duration < 0){
+										if(inMonth != outMonth){
+											if(getLastMonthNumber() === inMonth){
+												//alert("첫번째 달력 월: "+getFirstMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												//alert("두번째 달력 월: "+getLastMonthNumber()+" / 체크아웃 월 : "+outMonth);
+												for(var a = inDay; a <= 31; a++){
+													if($(calendarList[j]).text() == a){
+														$(calendarList[j]).addClass('unvailable');
+													}
+													
+												}
+											}
+											if(getLastMonthNumber() == outMonth){
+												
+												for(var a = 1; a <= outDay ; a++){
+													if($(calendarList[j]).text() == a){ 
+														$(calendarList[j]).addClass('unvailable');
+													}
+												}
+											}
+										}else if(inMonth == outMonth && getLastMonthNumber() === inMonth && $(calendarList[j]).hasClass('cur-month')){
+											
+											for (var a = inDay; a <= outDay; a++) {
+												if($(calendarList[j]).text() == a){
+													$(calendarList[j]).addClass('unvailable');
+												}
+											}
+										}
+									}
+								
+				        	}
+				        }
+				        break;
+				} 
+				         
+				/* 
+				for (var j = 0; j < calendarList.length; j++) {
+					
+					//하루 예약 일 때
+					if(duration == 0 && calendarList[j].textContent==inDay){
+							
+							$(calendarList[j]).addClass('unvailable');
+							//$(calendarList[j]).attr('onclick','');
+							//$(calendarList[j]).off();
+							
+					}
+					//이틀이상 예약 일 때
+					if(duration > 0){
+					
+						for (var a = inDay; a <= outDay; a++) {
+							if(calendarList[j].textContent == a){
+								$(calendarList[j]).addClass('unvailable');
+								
+							
+							}
+						}
+					}
+				}
+				 */
+			} 
+			
+			/* 
+			$('.cur-month.unvailable').on('click',function(e){
+				
+				alert($(e.target).text());
+				
+				$(e.target).off();
+				
+				e.preventDefault();
+			    e.isDefaultPrevented();
+			    e.stopPropagation();
+			    e.isPropagationStopped();
+			    e.stopImmediatePropagation();
+			    e.isImmediatePropagationStopped();
+			    e.isImmediatePropagationStopped();
+			    
+			
+			  
+			    
+				return false;
+			});
+			 */
+		 
+	    }
