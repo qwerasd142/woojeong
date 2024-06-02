@@ -1,7 +1,6 @@
 spring:
   application:
     name: Woojeong
-#  ??? DB??
   datasource:
     url: jdbc:oracle:thin:@124.198.47.195:1521:xe
     username: jdeveloper21
