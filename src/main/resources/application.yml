@@ -1,13 +1,13 @@
 spring:
   application:
     name: Woojeong
-#  ??? DB??
-  datasource:
-    url: jdbc:oracle:thin:@124.198.47.195:1521:xe
-    username: jdeveloper21
-    password: jdeveloper21
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-  #  JPA ??
+##  ??? DB??
+#  datasource:
+#    url: jdbc:oracle:thin:@124.198.47.195:1521:xe
+#    username: jdeveloper21
+#    password: jdeveloper21
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#  #  JPA ??
   jpa:
     hibernate:
       ddl-auto: update
