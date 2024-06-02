@@ -6,7 +6,6 @@ spring:
     username: jdeveloper21
     password: jdeveloper21
     driver-class-name: oracle.jdbc.driver.OracleDriver
-  #  JPA ??
   jpa:
     hibernate:
       ddl-auto: update

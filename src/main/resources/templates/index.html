@@ -102,7 +102,7 @@
 					<div class="container">
 						<span class="line-1">USA Exchange</span>
 						<h1 class="line-2">USA</h1>
-						<span class="line-3">yesterday</span>
+						<span class="line-3" id="USDrate">0000.00</span>
 					</div>
 				</div>
 			</div>
@@ -152,11 +152,29 @@
 	</div>
 </div>
 <script>
+	$(document).ready(function (){
+		get_rate();
+	})
+
 	function get_rate() {
 		$.ajax({
 			type: "GET",
-			url: "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=secpoB02tZriwE8V9hTRbWAxkzu7lM9v&searchdate=default&data=AP01",
-
+			url: "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=secpoB02tZriwE8V9hTRbWAxkzu7lM9v&searchdate=20240531&data=AP01",
+			data: {},
+			success: function (response) {
+				// API 응답의 배열 구조를 확인하고, 미국 달러 환율을 찾아서 표시합니다.
+				let usdRate = response.find(rateInfo => rateInfo.cur_unit === "USD");
+				if (usdRate) {
+					let now_rate = usdRate.ttb; // 필요한 환율 정보 선택 (ttb: 매입환율, tts: 매도환율)
+					$("#USDrate").text(now_rate);
+				} else {
+					console.error("USD rate not found in the response");
+				}
+			},
+			error: function (error) {
+				console.error("Error fetching the exchange rate:", error);
+				$("#USDrate").text("Error loading rate");
+			}
 		})
 	}
 </script>
