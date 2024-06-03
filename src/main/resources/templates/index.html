@@ -12,14 +12,14 @@
 <link href='https://fonts.googleapis.com/css?family=PT+Sans:300,400,700,900' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
 <!-- Styles -->
-<link rel="stylesheet" href="../static/assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="../static/assets/font-awesome-4.5.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="../static/assets/css/animate.min.css">
-<link rel="stylesheet" href="../static/assets/css/animations.css">
-<link rel="stylesheet" href="../static/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/font-awesome-4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/assets/css/animate.min.css">
+<link rel="stylesheet" href="/assets/css/animations.css">
+<link rel="stylesheet" href="/assets/css/style.css">
 <!--  Js -->
-<script src="../static/assets/js/modernizr.custom.js"></script>
-<script src="../static/assets/js/jquery-2.1.3.min.js"></script>
+<script src="/assets/js/modernizr.custom.js"></script>
+<script src="/assets/js/jquery-2.1.3.min.js"></script>
 </head>
 <body>
 <!-- NAVIGATION -->
@@ -27,7 +27,7 @@
 <!-- logo -->
 <div class="logo-box">
 	<a href="index.html" class="logo logo-img">
-	<img src="../static/assets/img/logo.png" alt="logo">
+	<img src="/assets/img/logo.png" alt="logo">
 	</a>
 </div>
 <!-- mobile -->
@@ -83,7 +83,7 @@
 		<!-- Item -->
 		<div class="item">
 			<div class="img-fill">
-				<img src="../static/assets/img/1.jpg" alt="">
+				<img src="/assets/img/1.jpg" alt="">
 				<div class="info">
 					<div class="container">
 						<span class="line-1">Exchange</span>
@@ -97,7 +97,7 @@
 		<!-- Item -->
 		<div class="item">
 			<div class="img-fill">
-				<img src="../static/assets/img/2.jpg" alt="">
+				<img src="/assets/img/2.jpg" alt="">
 				<div class="info">
 					<div class="container">
 						<span class="line-1">USA Exchange</span>
@@ -111,12 +111,12 @@
 		<!-- Item -->
 		<div class="item">
 			<div class="img-fill">
-				<img src="../static/assets/img/8.jpg" alt="">
+				<img src="/assets/img/8.jpg" alt="">
 				<div class="info">
 					<div class="container">
 						<span class="line-1">Europe Exchange</span>
 						<h1 class="line-2">Europe</h1>
-						<span class="line-3">yesterday</span>
+						<span class="line-3" id="EURrate">0000.00</span>
 					</div>
 				</div>
 			</div>
@@ -124,12 +124,12 @@
 		<!-- // Item -->
 		<div class="item">
 			<div class="img-fill">
-				<img src="../static/assets/img/1.jpg" alt="">
+				<img src="/assets/img/1.jpg" alt="">
 				<div class="info">
 					<div class="container">
 						<span class="line-1">Japan Exchange</span>
 						<h1 class="line-2">Japan</h1>
-						<span class="line-3">Yesterday</span>
+						<span class="line-3" id="JPYrate">0000.00</span>
 					</div>
 				</div>
 			</div>
@@ -138,12 +138,12 @@
 		<!-- Item -->
 		<div class="item">
 			<div class="img-fill">
-				<img src="../static/assets/img/2.jpg" alt="">
+				<img src="/assets/img/2.jpg" alt="">
 				<div class="info">
 					<div class="container">
 						<span class="line-1">China Exchange</span>
 						<h1 class="line-2">China</h1>
-						<span class="line-3">yesterday</span>
+						<span class="line-3" id="CNHrate">0000.00</span>
 					</div>
 				</div>
 			</div>
@@ -157,33 +157,50 @@
 	})
 
 	function get_rate() {
+		const today = new Date();
+		const year = today.getFullYear();
+		const month = (today.getMonth() + 1).toString().padStart(2,"0");
+		const day = today.getDate().toString().padStart(2,"0");
+		const rateDate = `${year}${month}${day}`;
+
 		$.ajax({
 			type: "GET",
-			url: "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=secpoB02tZriwE8V9hTRbWAxkzu7lM9v&searchdate=20240531&data=AP01",
-			data: {},
+			url: "/api/exchange-rates",
+			data: {
+				date: rateDate
+			},
 			success: function (response) {
 				// API 응답의 배열 구조를 확인하고, 미국 달러 환율을 찾아서 표시합니다.
 				let usdRate = response.find(rateInfo => rateInfo.cur_unit === "USD");
+				let eurRate = response.find(rateInfo => rateInfo.cur_unit === "EUR");
+				let jpyRate = response.find(rateInfo => rateInfo.cur_unit === "JPY(100)");
+				let cnhRate = response.find(rateInfo => rateInfo.cur_unit === "CNH");
 				if (usdRate) {
-					let now_rate = usdRate.ttb; // 필요한 환율 정보 선택 (ttb: 매입환율, tts: 매도환율)
-					$("#USDrate").text(now_rate);
-				} else {
-					console.error("USD rate not found in the response");
+					$("#USDrate").text(usdRate.ttb+" 원");
+				}
+				if(eurRate) {
+					$("#EURrate").text(eurRate.ttb+" 원");
+				}
+				if(jpyRate) {
+					$("#JPYrate").text(jpyRate.ttb+" 원");
+				}
+				if(cnhRate) {
+					$("#CNHrate").text(cnhRate.ttb+" 원");
 				}
 			},
 			error: function (error) {
 				console.error("Error fetching the exchange rate:", error);
-				$("#USDrate").text("Error loading rate");
+				$("#USDrate").text("안나와 안나온다고");
 			}
 		})
 	}
 </script>
 <!-- end: PAGE-WRAPPER -->
 <!-- SCRIPTS -->
-<script src="../static/assets/js/bootstrap.min.js"></script>
-<script src="../static/assets/js/functions.js"></script>
-<script src="../static/assets/js/pension.js"></script>
-<script src="../static/assets/js/homeslider.js"></script>
-<script src="../static/assets/js/jquery.grid-a-licious.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/functions.js"></script>
+<script src="/assets/js/pension.js"></script>
+<script src="/assets/js/homeslider.js"></script>
+<script src="/assets/js/jquery.grid-a-licious.js"></script>
 </body>
 </html>

@@ -1,22 +1,23 @@
 package com.example.woojeong.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "exchange_rate")
 public class ExchangeRateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String currency;
-    private String basePrice;
 
+    private String cur_unit;
+    private String ttb;
+    private LocalDate date;
 
 }

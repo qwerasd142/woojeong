@@ -2,33 +2,40 @@ package com.example.woojeong.Service;
 
 import com.example.woojeong.Entity.ExchangeRateEntity;
 import com.example.woojeong.Repository.ExchangeRateRepository;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.slf4j.Logger;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ExchangeRateService {
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    private ExchangeRateRepository exchangeRateRepository;
 
-    private final ExchangeRateRepository exchangeRateRepository;
+    public List<ExchangeRateEntity> fetchRatesFromApi(LocalDate date) {
+        String apiUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=secpoB02tZriwE8V9hTRbWAxkzu7lM9v&searchdate=%s&data=AP01";
+        String formattedDate = date.toString().replace("-","");
+        String url = String.format(apiUrl, formattedDate);
 
-    public ExchangeRateService(RestTemplate restTemplate, ExchangeRateRepository exchangeRateRepository){
-        this.restTemplate = restTemplate;
-        this.exchangeRateRepository = exchangeRateRepository;
+        RestTemplate restTemplate = new RestTemplate();
+        ExchangeRateEntity[] rates = restTemplate.getForObject(url, ExchangeRateEntity[].class);
+
+        return Arrays.asList(rates);
     }
 
-    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
-    public void updateExchangeRates() {
-        String url = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=secpoB02tZriwE8V9hTRbWAxkzu7lM9v&searchdate=20180102&data=AP01";
-        ExchangeRateEntity[] exchangeRateEntities = restTemplate.getForObject(url, ExchangeRateEntity[].class);
-
-        if (exchangeRateEntities != null) {
-            for (ExchangeRateEntity rate : exchangeRateEntities) {
-                exchangeRateRepository.save(rate);
-            }
+    public List<ExchangeRateEntity> getExchangeRates(LocalDate date){
+        List<ExchangeRateEntity> rates = exchangeRateRepository.findByDate(date);
+        if(rates.isEmpty()){
+            rates = fetchRatesFromApi(date);
+            exchangeRateRepository.saveAll(rates);
         }
-
+        return rates;
     }
+
+
+
 }
