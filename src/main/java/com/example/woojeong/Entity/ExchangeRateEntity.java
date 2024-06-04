@@ -18,6 +18,6 @@ public class ExchangeRateEntity {
 
     private String cur_unit;
     private String ttb;
-    private LocalDate date;
+    private LocalDate rateDate;
 
 }

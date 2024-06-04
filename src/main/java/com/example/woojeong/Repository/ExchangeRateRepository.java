@@ -7,5 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRateEntity, Long> {
-    List<ExchangeRateEntity> findByDate(LocalDate date);
+
+    List<ExchangeRateEntity> findByRateDate(LocalDate rateDate);
 }

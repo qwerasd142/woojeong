@@ -16,9 +16,9 @@ public class ExchangeRateService {
     @Autowired
     private ExchangeRateRepository exchangeRateRepository;
 
-    public List<ExchangeRateEntity> fetchRatesFromApi(LocalDate date) {
+    public List<ExchangeRateEntity> fetchRatesFromApi(LocalDate rateDate) {
         String apiUrl = "https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=secpoB02tZriwE8V9hTRbWAxkzu7lM9v&searchdate=%s&data=AP01";
-        String formattedDate = date.toString().replace("-","");
+        String formattedDate = rateDate.toString().replace("-","");
         String url = String.format(apiUrl, formattedDate);
 
         RestTemplate restTemplate = new RestTemplate();
@@ -27,10 +27,10 @@ public class ExchangeRateService {
         return Arrays.asList(rates);
     }
 
-    public List<ExchangeRateEntity> getExchangeRates(LocalDate date){
-        List<ExchangeRateEntity> rates = exchangeRateRepository.findByDate(date);
+    public List<ExchangeRateEntity> getExchangeRates(LocalDate rateDate){
+        List<ExchangeRateEntity> rates = exchangeRateRepository.findByRateDate(rateDate);
         if(rates.isEmpty()){
-            rates = fetchRatesFromApi(date);
+            rates = fetchRatesFromApi(rateDate);
             exchangeRateRepository.saveAll(rates);
         }
         return rates;
