@@ -9,4 +9,5 @@ import java.util.List;
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRateEntity, Long> {
 
     List<ExchangeRateEntity> findByRateDate(LocalDate rateDate);
+
 }

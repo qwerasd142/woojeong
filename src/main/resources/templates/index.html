@@ -103,6 +103,7 @@
 						<span class="line-1">USA Exchange</span>
 						<h1 class="line-2">USA</h1>
 						<span class="line-3" id="USDrate">0000.00</span>
+						<span class="line-3" id="USDratePrev">0000.00</span>
 					</div>
 				</div>
 			</div>
@@ -193,7 +194,28 @@
 				$("#USDrate").text("안나와 안나온다고");
 			}
 		})
+
+		$.ajax({
+			type: "GET",
+			url: "/api/exchange-rates-prev",
+			data: {
+				date: rateDate
+			},
+			success: function (response) {
+				// API 응답의 배열 구조를 확인하고, 미국 달러 환율을 찾아서 표시합니다.
+				let usdRate = response.find(rateInfo => rateInfo.cur_unit === "USD");
+				if (usdRate) {
+					$("#USDratePrev").text(usdRate.ttb+" 원");
+				}
+			},
+			error: function (error) {
+				console.error("Error fetching the exchange rate:", error);
+				$("#USDratePrev").text("안나와 안나온다고");
+			}
+		})
 	}
+
+
 </script>
 <!-- end: PAGE-WRAPPER -->
 <!-- SCRIPTS -->

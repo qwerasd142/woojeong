@@ -1,11 +1,10 @@
 package com.example.woojeong.Controller;
 
 import com.example.woojeong.Entity.ExchangeRateEntity;
+import com.example.woojeong.Entity.ExchangeRatePrevEntity;
 import com.example.woojeong.Service.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +21,14 @@ public class ExchangeRateController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate localDate = LocalDate.parse(date, formatter);
         return exchangeRateService.getExchangeRates(localDate);
+    }
+
+    @GetMapping("/api/exchange-rates-prev")
+    public List<ExchangeRatePrevEntity> getExchangeRatesPrev(@RequestParam("date") String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate rateDate = LocalDate.parse(date, formatter);
+        LocalDate previousDate = rateDate.minusDays(1);
+        return exchangeRateService.getExchangePrevRates(previousDate);
     }
 
 }
