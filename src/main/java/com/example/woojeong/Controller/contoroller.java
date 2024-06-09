@@ -12,4 +12,9 @@ public class contoroller {
         return "test";
     }
 
+
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
 }
