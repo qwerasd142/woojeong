@@ -4,9 +4,30 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <button id="btn">btn </button>
+    <button id="btn" onclick="fetchData()">btn </button>
 </head>
 <body>
 
 </body>
+
+<script>
+    // API에서 데이터 가져오는 함수
+    function fetchData() {
+        var url = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=secpoB02tZriwE8V9hTRbWAxkzu7lM9v&searchdate=20240531&data=AP01';
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+    fetchData();
+</script>
 </html>
