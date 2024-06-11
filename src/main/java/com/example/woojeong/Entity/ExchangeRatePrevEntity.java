@@ -19,6 +19,4 @@ public class ExchangeRatePrevEntity {
     private String cur_unit;
     private String ttb;
     private LocalDate prevRateDate;
-
-
 }

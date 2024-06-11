@@ -39,7 +39,7 @@
 	<div id="dl-menu" class="dl-menuwrapper">
 		<ul class="dl-menu dl-menuopen">
 			<li><a href="index.html">home</a></li>
-			<li><a href="about.html">about</a></li>
+			<li><a href="index-detail.html">about</a></li>
 			<li><a href="rooms.html">rooms</a></li>
 			<li><a href="events.html">events</a></li>
 			<li><a href="blog.html">blog</a></li>
@@ -101,9 +101,9 @@
 				<div class="info">
 					<div class="container">
 						<span class="line-1">USA Exchange</span>
-						<h1 class="line-2">USA</h1>
-						<span class="line-3" id="USDrate">0000.00</span>
-						<span class="line-3" id="USDratePrev">0000.00</span>
+						<h1 class="line-2"><a href="/index-detail">USA</a></h1>
+						<span class="line-3" id="USDrate">weekend is not data</span>
+						<span class="line-2" id="USDchange">비교</span>
 					</div>
 				</div>
 			</div>
@@ -116,8 +116,9 @@
 				<div class="info">
 					<div class="container">
 						<span class="line-1">Europe Exchange</span>
-						<h1 class="line-2">Europe</h1>
-						<span class="line-3" id="EURrate">0000.00</span>
+						<h1 class="line-2"><a href="/index-detail">Europe</a></h1>
+						<span class="line-3" id="EURrate">weekend is not data</span>
+						<span class="line-2" id="EURchange">비교</span>
 					</div>
 				</div>
 			</div>
@@ -129,8 +130,9 @@
 				<div class="info">
 					<div class="container">
 						<span class="line-1">Japan Exchange</span>
-						<h1 class="line-2">Japan</h1>
-						<span class="line-3" id="JPYrate">0000.00</span>
+						<h1 class="line-2"><a href="/index-detail">Japan</a></h1>
+						<span class="line-3" id="JPYrate">weekend is not data</span>
+						<span class="line-2" id="JPYchange">비교</span>
 					</div>
 				</div>
 			</div>
@@ -143,8 +145,9 @@
 				<div class="info">
 					<div class="container">
 						<span class="line-1">China Exchange</span>
-						<h1 class="line-2">China</h1>
-						<span class="line-3" id="CNHrate">0000.00</span>
+						<h1 class="line-2"><a href="/index-detail">China</a></h1>
+						<span class="line-3" id="CNHrate">weekend is not data</span>
+						<span class="line-2" id="CNHchange">비교</span>
 					</div>
 				</div>
 			</div>
@@ -173,21 +176,91 @@
 			success: function (response) {
 				// API 응답의 배열 구조를 확인하고, 미국 달러 환율을 찾아서 표시합니다.
 				let usdRate = response.find(rateInfo => rateInfo.cur_unit === "USD");
+				let usdRateDouble = parseFloat(usdRate.ttb);
+
 				let eurRate = response.find(rateInfo => rateInfo.cur_unit === "EUR");
+				let eurRateDouble = parseFloat(eurRate.ttb);
+
 				let jpyRate = response.find(rateInfo => rateInfo.cur_unit === "JPY(100)");
+				let jpyRateDouble = parseFloat(jpyRate.ttb);
+
 				let cnhRate = response.find(rateInfo => rateInfo.cur_unit === "CNH");
-				if (usdRate) {
-					$("#USDrate").text(usdRate.ttb+" 원");
+				let cnhRateDouble = parseFloat(cnhRate.ttb);
+
+				if (usdRateDouble) {
+					$("#USDrate").text(usdRateDouble+" 원");
 				}
 				if(eurRate) {
-					$("#EURrate").text(eurRate.ttb+" 원");
+					$("#EURrate").text(eurRateDouble+" 원");
 				}
 				if(jpyRate) {
-					$("#JPYrate").text(jpyRate.ttb+" 원");
+					$("#JPYrate").text(jpyRateDouble+" 원");
 				}
 				if(cnhRate) {
-					$("#CNHrate").text(cnhRate.ttb+" 원");
+					$("#CNHrate").text(cnhRateDouble+" 원");
 				}
+
+				$.ajax({
+					type: "GET",
+					url: "/api/exchange-rates-prev",
+					data: {
+						date: rateDate
+					},
+					success: function (response) {
+						// USD 비교
+						let usdRate = response.find(rateInfo => rateInfo.cur_unit === "USD");	// 전날 환율 가져오기
+						let usdRatePrevDouble = parseFloat(usdRate.ttb);	// String 타입의 json데이터 float로 변환
+						let USDresult = (usdRateDouble - usdRatePrevDouble).toFixed(2);	// 전날, 당일날 환율 차이
+						// 환율 등락
+						if(usdRateDouble > usdRatePrevDouble){
+							$("#USDchange").text(USDresult + "▲").css({"color":"red"});
+						} else if (usdRateDouble < usdRatePrevDouble) {
+							$("#USDchange").text(USDresult + "▼").css({"color":"blue"});
+						} else {
+							$("#USDchange").text(USDresult + "-");
+						}
+
+						// EUR 비교
+						let eurRate = response.find(rateInfo => rateInfo.cur_unit === "EUR");
+						let eurRatePrevDouble = parseFloat(eurRate.ttb);
+						let EURresult = (eurRateDouble - eurRatePrevDouble).toFixed(2);
+						if(eurRateDouble > eurRatePrevDouble){
+							$("#EURchange").text(EURresult + "▲").css({"color":"red"});
+						} else if (usdRateDouble < usdRatePrevDouble) {
+							$("#EURchange").text(EURresult + "▼").css({"color":"blue"});
+						} else {
+							$("#EURchange").text(EURresult + "-");
+						}
+
+						// JPY 비교
+						let jpyRate = response.find(rateInfo => rateInfo.cur_unit === "JPY(100)");
+						let jpyRatePrevDouble = parseFloat(jpyRate.ttb);
+						let JPYresult = (jpyRateDouble - jpyRatePrevDouble).toFixed(2);
+						if(jpyRateDouble > jpyRatePrevDouble){
+							$("#JPYchange").text(JPYresult + "▲").css({"color":"red"});
+						} else if (jpyRateDouble < jpyRatePrevDouble) {
+							$("#JPYchange").text(JPYresult + "▼").css({"color":"blue"});
+						} else {
+							$("#JPYchange").text(JPYresult + "-");
+						}
+
+						// CNH 비교
+						let cnhRate = response.find(rateInfo => rateInfo.cur_unit === "CNH");
+						let cnhRatePrevDouble = parseFloat(cnhRate.ttb);
+						let CNHresult = (cnhRateDouble - cnhRatePrevDouble).toFixed(2);
+						if(cnhRateDouble > cnhRatePrevDouble){
+							$("#CNHchange").text(CNHresult + "▲").css({"color":"red"});
+						} else if (cnhRateDouble < cnhRatePrevDouble) {
+							$("#CNHchange").text(CNHresult + "▼").css({"color":"blue"});
+						} else {
+							$("#CNHchange").text(CNHresult + "-");
+						}
+					},
+					error: function (error) {
+						console.error("Error fetching the exchange rate:", error);
+						$("#USDratePrev").text("안나와 안나온다고");
+					}
+				})
 			},
 			error: function (error) {
 				console.error("Error fetching the exchange rate:", error);
@@ -195,25 +268,10 @@
 			}
 		})
 
-		$.ajax({
-			type: "GET",
-			url: "/api/exchange-rates-prev",
-			data: {
-				date: rateDate
-			},
-			success: function (response) {
-				// API 응답의 배열 구조를 확인하고, 미국 달러 환율을 찾아서 표시합니다.
-				let usdRate = response.find(rateInfo => rateInfo.cur_unit === "USD");
-				if (usdRate) {
-					$("#USDratePrev").text(usdRate.ttb+" 원");
-				}
-			},
-			error: function (error) {
-				console.error("Error fetching the exchange rate:", error);
-				$("#USDratePrev").text("안나와 안나온다고");
-			}
-		})
+
+
 	}
+
 
 
 </script>
