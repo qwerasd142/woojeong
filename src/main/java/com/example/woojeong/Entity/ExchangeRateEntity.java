@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "exchange_rate")
+@Table(name = "TA_exchange_rate")
 public class ExchangeRateEntity {
 
     @Id
