@@ -61,4 +61,5 @@ public class BoardEntity {
         boardEntity.setViews(boardDTO.getViews());
         return boardEntity;
     }
+
 }
