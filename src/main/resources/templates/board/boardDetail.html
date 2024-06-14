@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BoardDetail</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>id</th>
+            <td th:text="${board.id}"></td>
+        </tr>
+        <tr>
+            <th>작성자</th>
+            <td th:text="${board.name}"></td>
+        </tr>
+        <tr>
+            <th>제목</th>
+            <td th:text="${board.title}"></td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td th:text="${board.content}"></td>
+        </tr>
+        <tr>
+            <th>등록 날짜</th>
+            <td th:text="${board.createTime}"></td>
+        </tr>
+        <tr>
+            <th>조회수</th>
+            <td th:text="${board.views}"></td>
+        </tr>
+    </table>
+    <input type="hidden" id="pass" th:value="${board.password}">
+<button onclick="boardList()">목록</button>
+<button onclick="boardUpdateForm()">수정</button>
+<button onclick="boardDelete()">삭제</button>
+</body>
+<script th:inline="javascript">
+    // 게시판 목록
+    function boardList(){
+        location.href="/board";
+    }
+    // 수정
+    function boardUpdateForm(){
+        const id = [[${board.id}]];
+        location.href = "/board/update/" + id;
+    }
+
+    // 삭제
+    function boardDelete() {
+        const getPass = prompt("비밀번호를 입력하세요");
+        const pass = document.getElementById("pass").value;
+        const id = [[${board.id}]];
+        if(getPass == pass){
+            alert("삭제되었습니다.");
+            location.href = "/board/delete/" + id;
+        } else {
+            alert("비밀번호가 틀렸습니다.");
+            location.href = "redirect:/board/"+ id;
+        }
+
+    }
+</script>
+</html>

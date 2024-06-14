@@ -50,4 +50,16 @@ public class BoardEntity {
         boardEntity.setViews(0);
         return boardEntity;
     }
+
+    public static BoardEntity toUpdateEntity(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setId(boardDTO.getId());
+        boardEntity.setName(boardDTO.getName());
+        boardEntity.setTitle(boardDTO.getTitle());
+        boardEntity.setContent(boardDTO.getContent());
+        boardEntity.setPassword(boardDTO.getPassword());
+        boardEntity.setViews(boardDTO.getViews());
+        return boardEntity;
+    }
+
 }
