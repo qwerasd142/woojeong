@@ -34,5 +34,12 @@ public class BoardDTO {
         return boardDTO;
     }
 
+    public BoardDTO(Long id, String name, String title, int views, LocalDateTime createTime) {
+        this.id = id;
+        this.name = name;
+        this.title = title;
+        this.views = views;
+        this.createTime = createTime;
+    }
 
 }

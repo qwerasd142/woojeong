@@ -22,10 +22,15 @@
         </tr>
     </table>
     <button onclick="writeBoard()">글작성</button>
+    <button onclick="pagingReq()">글목록</button>
 </body>
 <script>
     function writeBoard(){
         location.href="/board/write";
+    }
+
+    function pagingReq() {
+        location.href="/board/paging"
     }
 
 </script>

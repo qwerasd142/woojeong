@@ -39,7 +39,7 @@
 <script th:inline="javascript">
     // 게시판 목록
     function boardList(){
-        location.href="/board";
+        location.href="/board/paging?page="+[[${page}]];
     }
     // 수정
     function boardUpdateForm(){
