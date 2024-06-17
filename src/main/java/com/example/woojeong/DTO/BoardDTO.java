@@ -33,7 +33,6 @@ public class BoardDTO {
         boardDTO.setUpdateTime(boardEntity.getUpdateTime());
         return boardDTO;
     }
-
     public BoardDTO(Long id, String name, String title, int views, LocalDateTime createTime) {
         this.id = id;
         this.name = name;

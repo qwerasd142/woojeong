@@ -62,6 +62,7 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
+    
     public Page<BoardDTO> paging(Pageable pageable) {
         int page = pageable.getPageNumber() - 1;
         int pageLimit = 5;  // 한 페이지에 보여줄 글 갯수

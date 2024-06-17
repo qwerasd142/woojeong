@@ -36,6 +36,7 @@ public class BoardController {
         model.addAttribute("endPage", endPage);
         return "board/boardPaging";
     }
+
 //    @GetMapping("")
 //    public String boardList(Model model){
 //        List<BoardDTO> boardDTOList = boardService.findAll();
